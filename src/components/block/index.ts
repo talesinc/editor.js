@@ -4,16 +4,16 @@ import {
   BlockToolData,
   BlockTune as IBlockTune,
   SanitizerConfig,
-  ToolConfig
-} from '../../../types';
+  ToolConfig,
+} from "../../../types";
 
-import { SavedData } from '../../../types/data-formats';
-import $ from '../dom';
-import * as _ from '../utils';
-import ApiModules from '../modules/api';
-import BlockAPI from './api';
-import SelectionUtils from '../selection';
-import BlockTool from '../tools/block';
+import { SavedData } from "../../../types/data-formats";
+import $ from "../dom";
+import * as _ from "../utils";
+import ApiModules from "../modules/api";
+import BlockAPI from "./api";
+import SelectionUtils from "../selection";
+import BlockTool from "../tools/block";
 
 import BlockTune from '../tools/tune';
 import { BlockTuneData } from '../../../types/block-tunes/block-tune-data';
@@ -52,7 +52,7 @@ interface BlockConstructorOptions {
   /**
    * Tunes data for current Block
    */
-  tunesData: {[name: string]: BlockTuneData};
+  tunesData: { [name: string]: BlockTuneData };
 }
 
 /**
@@ -72,12 +72,12 @@ export enum BlockToolAPI {
    * @todo remove method in 3.0.0
    * @deprecated — use 'rendered' hook instead
    */
-  APPEND_CALLBACK = 'appendCallback',
-  RENDERED = 'rendered',
-  MOVED = 'moved',
-  UPDATED = 'updated',
-  REMOVED = 'removed',
-  ON_PASTE = 'onPaste',
+  APPEND_CALLBACK = "appendCallback",
+  RENDERED = "rendered",
+  MOVED = "moved",
+  UPDATED = "updated",
+  REMOVED = "removed",
+  ON_PASTE = "onPaste",
 }
 
 /**
@@ -98,14 +98,15 @@ export default class Block extends EventsDispatcher<BlockEvents> {
    *
    * @returns {{wrapper: string, content: string}}
    */
-  public static get CSS(): {[name: string]: string} {
+  public static get CSS(): { [name: string]: string } {
     return {
-      wrapper: 'ce-block',
-      wrapperStretched: 'ce-block--stretched',
-      content: 'ce-block__content',
-      focused: 'ce-block--focused',
-      selected: 'ce-block--selected',
-      dropTarget: 'ce-block--drop-target',
+      wrapper: "ce-block",
+      wrapperStretched: "ce-block--stretched",
+      content: "ce-block__content",
+      focused: "ce-block--focused",
+      selected: "ce-block--selected",
+      dropTarget: "ce-block--drop-target",
+      pluginsContent: "ce-block__plugins-content",
     };
   }
 
@@ -170,7 +171,7 @@ export default class Block extends EventsDispatcher<BlockEvents> {
    * If there is saved data for Tune which is not available at the moment,
    * we will store it here and provide back on save so data is not lost
    */
-  private unavailableTunesData: {[name: string]: BlockTuneData} = {};
+  private unavailableTunesData: { [name: string]: BlockTuneData } = {};
 
   /**
    * Editor`s API module
@@ -319,7 +320,9 @@ export default class Block extends EventsDispatcher<BlockEvents> {
    * @param {HTMLElement | Node} element - HTML Element to set as current input
    */
   public set currentInput(element: HTMLElement | Node) {
-    const index = this.inputs.findIndex((input) => input === element || input.contains(element));
+    const index = this.inputs.findIndex(
+      (input) => input === element || input.contains(element)
+    );
 
     if (index !== -1) {
       this.inputIndex = index;
@@ -422,17 +425,17 @@ export default class Block extends EventsDispatcher<BlockEvents> {
      * @type {string[]}
      */
     const mediaTags = [
-      'img',
-      'iframe',
-      'video',
-      'audio',
-      'source',
-      'input',
-      'textarea',
-      'twitterwidget',
+      "img",
+      "iframe",
+      "video",
+      "audio",
+      "source",
+      "input",
+      "textarea",
+      "twitterwidget",
     ];
 
-    return !!this.holder.querySelector(mediaTags.join(','));
+    return !!this.holder.querySelector(mediaTags.join(","));
   }
 
   /**
@@ -511,14 +514,28 @@ export default class Block extends EventsDispatcher<BlockEvents> {
    * @returns {HTMLElement}
    */
   public get pluginsContent(): HTMLElement {
-    const blockContentNodes = this.holder.querySelector(`.${Block.CSS.content}`);
+    // First we attempt to directly fetch pluginsContent node. If we see it, we use it.
+    const pluginsContentNodes = this.holder.querySelector(
+      `.${Block.CSS.pluginsContent}`
+    );
+    if (pluginsContentNodes) {
+      return pluginsContentNodes as HTMLElement;
+    }
+
+    const blockContentNodes = this.holder.querySelector(
+      `.${Block.CSS.content}`
+    );
 
     if (blockContentNodes && blockContentNodes.childNodes.length) {
       /**
        * Editors Block content can contain different Nodes from extensions
        * We use DOM isExtensionNode to ignore such Nodes and return first Block that does not match filtering list
        */
-      for (let child = blockContentNodes.childNodes.length - 1; child >= 0; child--) {
+      for (
+        let child = blockContentNodes.childNodes.length - 1;
+        child >= 0;
+        child--
+      ) {
         const contentNode = blockContentNodes.childNodes[child];
 
         if (!$.isExtensionNode(contentNode)) {
@@ -545,9 +562,9 @@ export default class Block extends EventsDispatcher<BlockEvents> {
     if (_.isFunction(this.toolInstance[methodName])) {
       if (methodName === BlockToolAPI.APPEND_CALLBACK) {
         _.log(
-          '`appendCallback` hook is deprecated and will be removed in the next major release. ' +
-          'Use `rendered` hook instead',
-          'warn'
+          "`appendCallback` hook is deprecated and will be removed in the next major release. " +
+            "Use `rendered` hook instead",
+          "warn"
         );
       }
 
@@ -555,7 +572,7 @@ export default class Block extends EventsDispatcher<BlockEvents> {
         // eslint-disable-next-line no-useless-call
         this.toolInstance[methodName].call(this.toolInstance, params);
       } catch (e) {
-        _.log(`Error during '${methodName}' call: ${e.message}`, 'error');
+        _.log(`Error during '${methodName}' call: ${e.message}`, "error");
       }
     }
   }
@@ -575,23 +592,29 @@ export default class Block extends EventsDispatcher<BlockEvents> {
    *
    * @returns {object}
    */
-  public async save(): Promise<void|SavedData> {
-    const extractedBlock = await this.toolInstance.save(this.pluginsContent as HTMLElement);
-    const tunesData: {[name: string]: BlockTuneData} = this.unavailableTunesData;
+  public async save(): Promise<void | SavedData> {
+    const extractedBlock = await this.toolInstance.save(
+      this.pluginsContent as HTMLElement
+    );
+    const tunesData: { [name: string]: BlockTuneData } =
+      this.unavailableTunesData;
 
     [
       ...this.tunesInstances.entries(),
       ...this.defaultTunesInstances.entries(),
-    ]
-      .forEach(([name, tune]) => {
-        if (_.isFunction(tune.save)) {
-          try {
-            tunesData[name] = tune.save();
-          } catch (e) {
-            _.log(`Tune ${tune.constructor.name} save method throws an Error %o`, 'warn', e);
-          }
+    ].forEach(([name, tune]) => {
+      if (_.isFunction(tune.save)) {
+        try {
+          tunesData[name] = tune.save();
+        } catch (e) {
+          _.log(
+            `Tune ${tune.constructor.name} save method throws an Error %o`,
+            "warn",
+            e
+          );
         }
-      });
+      }
+    });
 
     /**
      * Measuring execution time
@@ -613,7 +636,11 @@ export default class Block extends EventsDispatcher<BlockEvents> {
         };
       })
       .catch((error) => {
-        _.log(`Saving proccess for ${this.name} tool failed due to the ${error}`, 'log', 'red');
+        _.log(
+          `Saving proccess for ${this.name} tool failed due to the ${error}`,
+          "log",
+          "red"
+        );
       });
   }
 
@@ -665,9 +692,10 @@ export default class Block extends EventsDispatcher<BlockEvents> {
      *
      * If anchorNode is undefined, also use activeElement
      */
-    this.currentInput = $.isNativeInput(document.activeElement) || !SelectionUtils.anchorNode
-      ? document.activeElement
-      : SelectionUtils.anchorNode;
+    this.currentInput =
+      $.isNativeInput(document.activeElement) || !SelectionUtils.anchorNode
+        ? document.activeElement
+        : SelectionUtils.anchorNode;
   }
 
   /**
@@ -677,15 +705,12 @@ export default class Block extends EventsDispatcher<BlockEvents> {
     /**
      * Observe DOM mutations to update Block inputs
      */
-    this.mutationObserver.observe(
-      this.holder.firstElementChild,
-      {
-        childList: true,
-        subtree: true,
-        characterData: true,
-        attributes: true,
-      }
-    );
+    this.mutationObserver.observe(this.holder.firstElementChild, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true,
+    });
 
     /**
      * Mutation observer doesn't track changes in "<input>" and "<textarea>"
@@ -728,9 +753,9 @@ export default class Block extends EventsDispatcher<BlockEvents> {
    * @returns {HTMLDivElement}
    */
   private compose(): HTMLDivElement {
-    const wrapper = $.make('div', Block.CSS.wrapper) as HTMLDivElement,
-        contentNode = $.make('div', Block.CSS.content),
-        pluginsContent = this.toolInstance.render();
+    const wrapper = $.make("div", Block.CSS.wrapper) as HTMLDivElement,
+      contentNode = $.make("div", Block.CSS.content),
+      pluginsContent = this.toolInstance.render();
 
     contentNode.appendChild(pluginsContent);
 
@@ -745,16 +770,22 @@ export default class Block extends EventsDispatcher<BlockEvents> {
      */
     let wrappedContentNode: HTMLElement = contentNode;
 
-    [...this.tunesInstances.values(), ...this.defaultTunesInstances.values()]
-      .forEach((tune) => {
-        if (_.isFunction(tune.wrap)) {
-          try {
-            wrappedContentNode = tune.wrap(wrappedContentNode);
-          } catch (e) {
-            _.log(`Tune ${tune.constructor.name} wrap method throws an Error %o`, 'warn', e);
-          }
+    [
+      ...this.tunesInstances.values(),
+      ...this.defaultTunesInstances.values(),
+    ].forEach((tune) => {
+      if (_.isFunction(tune.wrap)) {
+        try {
+          wrappedContentNode = tune.wrap(wrappedContentNode);
+        } catch (e) {
+          _.log(
+            `Tune ${tune.constructor.name} wrap method throws an Error %o`,
+            "warn",
+            e
+          );
         }
-      });
+      }
+    });
 
     wrapper.appendChild(wrappedContentNode);
 
@@ -767,11 +798,16 @@ export default class Block extends EventsDispatcher<BlockEvents> {
    * @param tunesData - current Block tunes data
    * @private
    */
-  private composeTunes(tunesData: {[name: string]: BlockTuneData}): void {
+  private composeTunes(tunesData: { [name: string]: BlockTuneData }): void {
     Array.from(this.tunes.values()).forEach((tune) => {
-      const collection = tune.isInternal ? this.defaultTunesInstances : this.tunesInstances;
+      const collection = tune.isInternal
+        ? this.defaultTunesInstances
+        : this.tunesInstances;
 
-      collection.set(tune.name, tune.create(tunesData[tune.name], this.blockAPI));
+      collection.set(
+        tune.name,
+        tune.create(tunesData[tune.name], this.blockAPI)
+      );
     });
 
     /**
@@ -797,7 +833,7 @@ export default class Block extends EventsDispatcher<BlockEvents> {
      * Update current input
      */
     this.updateCurrentInput();
-  }
+  };
 
   /**
    * Adds focus event listeners to all inputs and contentEditables
