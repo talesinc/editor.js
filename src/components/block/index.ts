@@ -518,7 +518,6 @@ export default class Block extends EventsDispatcher<BlockEvents> {
     const pluginsContentNodes = this.holder.querySelector(
       `.${Block.CSS.pluginsContent}`
     );
-    console.log(pluginsContentNodes);
     if (pluginsContentNodes) {
       return pluginsContentNodes as HTMLElement;
     }
