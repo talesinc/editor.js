@@ -492,10 +492,8 @@ export default class Block {
     const pluginsContentNodes = this.holder.querySelector(
       `.${Block.CSS.pluginsContent}`
     );
-    console.log(pluginsContentNodes);
     if (pluginsContentNodes) {
-      console.log(pluginsContentNodes[0]);
-      return pluginsContentNodes[0] as HTMLElement;
+      return pluginsContentNodes as HTMLElement;
     }
 
     const blockContentNodes = this.holder.querySelector(
