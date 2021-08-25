@@ -222,7 +222,7 @@ export default class BlockEvents extends Module {
    *
    * @param {KeyboardEvent} event - keydown
    */
-  private enter(event: KeyboardEvent): void {
+  private async enter(event: KeyboardEvent): Promise<void> {
     const { BlockManager, UI } = this.Editor;
     const currentBlock = BlockManager.currentBlock;
 
@@ -266,7 +266,7 @@ export default class BlockEvents extends Module {
        * Split the Current Block into two blocks
        * Renew local current node after split
        */
-      newCurrent = this.Editor.BlockManager.split();
+      newCurrent = await this.Editor.BlockManager.split();
     }
 
     this.Editor.Caret.setToBlock(newCurrent);
