@@ -35,12 +35,7 @@ export default class BlocksAPI extends Module {
       insertNewBlock: (): void => this.insertNewBlock(),
       insert: this.insert,
       update: this.update,
-      setBlockFocus: (index: number, focus: boolean): void => {
-        this.Editor.BlockManager.getBlockByIndex(index).focused = focus;
-      },
-      clearAllBlockFocus: () => {
-        this.Editor.BlockManager.clearFocused();
-      },
+      getManager: () => this.Editor.BlockManager,
     };
   }
 

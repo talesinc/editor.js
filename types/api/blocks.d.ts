@@ -1,3 +1,4 @@
+import BlockManager from "../../src/components/modules/blockManager";
 import { OutputData } from "../data-formats/output-data";
 import { BlockToolData, ToolConfig } from "../tools";
 import { BlockAPI } from "./block";
@@ -114,12 +115,7 @@ export interface Blocks {
   update(id: string, data: BlockToolData): void;
 
   /**
-   * Sets focus state on a particular block
+   * Gets BlockManager
    */
-  setBlockFocus(index: number, focus: boolean): void;
-
-  /**
-   * Removes focus state from all blocks
-   */
-  clearAllBlockFocus(): void;
+  getManager(): BlockManager
 }
