@@ -1,4 +1,4 @@
-import BlockManager from "../../src/components/modules/blockManager";
+import { BlockManagerAPI } from "./block-manager";
 import { OutputData } from "../data-formats/output-data";
 import { BlockToolData, ToolConfig } from "../tools";
 import { BlockAPI } from "./block";
@@ -117,5 +117,5 @@ export interface Blocks {
   /**
    * Gets BlockManager
    */
-  getManager(): BlockManager
+  getManager(): BlockManagerAPI
 }

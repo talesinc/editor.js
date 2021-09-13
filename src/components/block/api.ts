@@ -67,6 +67,18 @@ function BlockAPI(
       return block.selected;
     },
 
+    set selected(state:boolean) {
+      block.selected = state
+    },
+
+    get focused(): boolean {
+      return block.focused;
+    },
+
+    set focused(state:boolean) {
+      block.focused = state
+    },
+
     /**
      * Set Block's stretch state
      *

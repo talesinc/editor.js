@@ -33,7 +33,12 @@ export interface BlockAPI {
   /**
    * True if Block is selected with Cross-Block selection
    */
-  readonly selected: boolean;
+  selected: boolean;
+
+  /**
+   * Block's focused state
+   */
+  focused: boolean;
 
   /**
    * Setter sets Block's stretch state
