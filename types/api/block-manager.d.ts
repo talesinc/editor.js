@@ -1,33 +1,34 @@
+import { BlockAPI } from ".";
 import Block from "../../src/components/block";
 
 export interface BlockManagerAPI {
   currentBlockIndex: number;
 
-  readonly firstBlock: Block;
-  readonly lastBlock: Block;
-  readonly currentBlock: Block;
-  readonly nextBlock: Block;
+  readonly firstBlock: BlockAPI;
+  readonly lastBlock: BlockAPI;
+  readonly currentBlock: BlockAPI;
+  readonly nextBlock: BlockAPI;
 
-  readonly nextContentfulBlock: Block;
-  readonly previousContentfulBlock: Block;
+  readonly nextContentfulBlock: BlockAPI;
+  readonly previousContentfulBlock: BlockAPI;
 
-  readonly previousBlock: Block;
-  readonly blocks: Block[];
+  readonly previousBlock: BlockAPI;
+  readonly blocks: BlockAPI[];
 
   readonly isEditorEmpty: boolean;
   
   toggleReadOnly(readOnlyEnabled: boolean): void;
 
-  getBlockByIndex(index): Block;
-  getBlockIndex(block: Block): number;
-  getBlockById(id): Block | undefined;
-  getBlock(element: HTMLElement): Block;
+  getBlockByIndex: (index) => BlockAPI;
+  getBlockIndex: (block: BlockAPI) => number;
+  getBlockById: (id) => BlockAPI | undefined;
+  getBlock: (element: HTMLElement) => BlockAPI;
 
-  highlightCurrentNode(): void;
-  clearFocused(): void;
+  highlightCurrentNode: () => void;
+  clearFocused: () => void;
 
-  setCurrentBlockByChildNode(childNode: Node): Block | undefined;
-  getBlockByChildNode(childNode: Node): Block;
+  setCurrentBlockByChildNode: (childNode: Node) => BlockAPI | undefined;
+  getBlockByChildNode: (childNode: Node) => BlockAPI;
 
-  dropPointer(): void;
+  dropPointer: () => void;
 }
