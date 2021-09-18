@@ -217,7 +217,7 @@ export default class Dom {
       "password",
       "email",
       "number",
-      "search",
+      // "search", // Used to support search, but we're using it in block editor so skipping
       "tel",
       "url",
     ];
