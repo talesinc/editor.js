@@ -1,6 +1,7 @@
-import {OutputData} from '../data-formats/output-data';
-import {BlockToolData, ToolConfig} from '../tools';
-import {BlockAPI} from './block';
+import { BlockManagerAPI } from "./block-manager";
+import { OutputData } from "../data-formats/output-data";
+import { BlockToolData, ToolConfig } from "../tools";
+import { BlockAPI } from "./block";
 
 /**
  * Describes methods to manipulate with Editor`s blocks
@@ -102,9 +103,8 @@ export interface Blocks {
     data?: BlockToolData,
     config?: ToolConfig,
     index?: number,
-    needToFocus?: boolean,
+    needToFocus?: boolean
   ): void;
-
 
   /**
    * Updates block data by id
@@ -113,4 +113,9 @@ export interface Blocks {
    * @param data - the new data
    */
   update(id: string, data: BlockToolData): void;
+
+  /**
+   * Gets BlockManager
+   */
+  getManager(): BlockManagerAPI
 }
