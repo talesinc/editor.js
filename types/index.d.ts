@@ -99,6 +99,7 @@ export interface API {
  */
 declare class EditorJS {
   public static version: string;
+  public configuration: EditorConfig;
 
   public isReady: Promise<void>;
 
