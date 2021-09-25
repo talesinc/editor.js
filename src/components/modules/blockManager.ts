@@ -304,6 +304,7 @@ export default class BlockManager extends Module {
 
     if (needToFocus) {
       this.currentBlockIndex = newIndex;
+      block.holder.scrollIntoView();
     } else if (newIndex <= this.currentBlockIndex) {
       this.currentBlockIndex++;
     }
