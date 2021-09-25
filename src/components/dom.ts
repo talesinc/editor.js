@@ -654,4 +654,15 @@ export default class Dom {
   public static isAnchor(element: Element): element is HTMLAnchorElement {
     return element.tagName.toLowerCase() === "a";
   }
+
+  public static isElementInViewport (el:Element): boolean {
+    var rect = el.getBoundingClientRect();
+
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /* or $(window).height() */
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */
+    );
+}
 }
