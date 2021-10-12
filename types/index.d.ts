@@ -106,6 +106,7 @@ declare class EditorJS {
   public isReady: Promise<void>;
 
   public blocks: Blocks;
+  public blockSelection: BlockSelection;
   public caret: Caret;
   public sanitizer: Sanitizer;
   public saver: Saver;
