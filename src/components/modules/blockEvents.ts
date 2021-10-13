@@ -230,7 +230,6 @@ export default class BlockEvents extends Module {
      * Don't handle Enter keydowns when Tool sets enableLineBreaks to true.
      * Uses for Tools like <code> where line breaks should be handled by default behaviour.
      */
-    console.log("Line break? " + currentBlock.tool.isLineBreaksEnabled)
     if (currentBlock.tool.isLineBreaksEnabled) {
       return;
     }
