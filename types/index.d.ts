@@ -30,6 +30,7 @@ import {
 } from './api';
 
 import { OutputData } from './data-formats';
+import BlockSelection from '../src/components/modules/blockSelection';
 
 /**
  * Interfaces used for development
@@ -79,6 +80,7 @@ export { BlockAPI } from './api'
  */
 export interface API {
   blocks: Blocks;
+  blockSelection: BlockSelection;
   caret: Caret;
   events: Events;
   listeners: Listeners;
@@ -104,6 +106,7 @@ declare class EditorJS {
   public isReady: Promise<void>;
 
   public blocks: Blocks;
+  public blockSelection: BlockSelection;
   public caret: Caret;
   public sanitizer: Sanitizer;
   public saver: Saver;
