@@ -700,3 +700,31 @@ export function cacheable<Target, Value, Arguments extends unknown[] = unknown[]
 
   return descriptor;
 };
+
+export const replaceMSCharacters = (input:string) : string => {
+  var mapping = {
+    "…": "...",
+    "—": "-",
+    "–": "-",
+    "‘": "'",
+    "’": "'",
+    "´": "'",
+    "“": '"',
+    "”": '"',
+    "&nbsp;": " ",
+  }
+  if (!input) {
+    return input
+  }
+  const output = input.replace(/[…—–‘’´“”]|&nbsp;/g, m => mapping[m])
+  return output
+}
+
+export const trimLineBreaks = (input:string): string => {
+  if (!input) {
+    return input
+  }
+
+  const output = input.replace(/^\n+|\n+$/g, '')
+  return output
+}
