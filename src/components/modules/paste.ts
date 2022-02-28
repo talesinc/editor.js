@@ -167,10 +167,9 @@ export default class Paste extends Module {
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const includesFiles = types.includes ? types.includes('Files') : (types as any).contains('Files');
-
-    if (includesFiles) {
+    const includesHtml = types.includes ? types.includes('text/html') : (types as any).contains('text/html');
+    if (includesFiles && !includesHtml) {
       await this.processFiles(dataTransfer.files);
-
       return;
     }
 
@@ -217,12 +216,17 @@ export default class Paste extends Module {
   /**
    * Process pasted text and divide them into Blocks
    *
-   * @param {string} data - text to process. Can be HTML or plain.
+   * @param {string} rawData - text to process. Can be HTML or plain.
    * @param {boolean} isHTML - if passed string is HTML, this parameter should be true
    */
-  public async processText(data: string, isHTML = false): Promise<void> {
+  public async processText(rawData: string, isHTML = false): Promise<void> {
     const { Caret, BlockManager } = this.Editor;
-    const dataToInsert = isHTML ? this.processHTML(data) : this.processPlain(data);
+
+    // Sanitize data
+    const data = _.trimLineBreaks(_.replaceMSCharacters(rawData))
+
+    // We stip out inner linebreaks if it's HTML. Rely on tags for paragraph formatting.
+    const dataToInsert = isHTML ? this.processHTML(data.replace(/\r?\n/g, " ")) : this.processPlain(data);
 
     if (!dataToInsert.length) {
       return;
@@ -447,6 +451,7 @@ export default class Paste extends Module {
    * @param {FileList} items - pasted or dropped items
    */
   private async processFiles(items: FileList): Promise<void> {
+    
     const { BlockManager } = this.Editor;
 
     let dataToInsert: {type: string; event: PasteEvent}[];
@@ -569,7 +574,7 @@ export default class Paste extends Module {
   }
 
   /**
-   * Split plain text by new line symbols and return it as array of Block data
+   * Split plain text by double new line symbols and return it as array of Block data
    *
    * @param {string} plain - string to process
    *
@@ -585,7 +590,7 @@ export default class Paste extends Module {
     const tool = defaultBlock;
 
     return plain
-      .split(/\r?\n/)
+      .split(/\r?\n\r?\n/)
       .filter((text) => text.trim())
       .map((text) => {
         const content = $.make('div');
