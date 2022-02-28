@@ -2,7 +2,9 @@
 /**
  * Use external module CodeX Tooltip
  */
-import CodeXTooltips, { TooltipContent, TooltipOptions } from 'codex-tooltip';
+import CodeXTooltips  from 'codex-tooltip';
+import TooltipContent from 'codex-tooltip/types/tooltip-content'
+import TooltipOptions from 'codex-tooltip/types/tooltip-options'
 
 /**
  * Tooltip
@@ -33,6 +35,7 @@ export default class Tooltip {
    */
   public show(element: HTMLElement, content: TooltipContent, options?: TooltipOptions): void {
     this.lib.show(element, content, options);
+    Tooltip
   }
 
   /**
