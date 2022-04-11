@@ -264,11 +264,13 @@ export default class Caret extends Module {
       this.set(nodeToSet as HTMLElement, offset);
     }, 20)();
 
-    block.holder.scrollIntoView({
-      block: "end",
-      inline: "nearest",
-      behavior: "auto"
-    });
+    if (!_.isElementInViewport(block.holder)) {
+      block.holder.scrollIntoView({
+        block: "end",
+        inline: "nearest",
+        behavior: "auto"
+      });
+    }
 
     BlockManager.setCurrentBlockByChildNode(block.holder);
     BlockManager.currentBlock.currentInput = element;
