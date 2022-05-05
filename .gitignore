@@ -4,6 +4,7 @@ Thumbs.db
 /.idea/
 /*.sublime-project
 /*.sublime-workspace
+/.vscode
 
 node_modules/*
 

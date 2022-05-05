@@ -8990,6 +8990,11 @@ unicode-property-aliases-ecmascript@^1.0.4:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/unicode-property-aliases-ecmascript/-/unicode-property-aliases-ecmascript-1.1.0.tgz#dd57a99f6207bedff4628abefb94c50db941c8f4"
 
+unidecode-plus@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/unidecode-plus/-/unidecode-plus-1.0.4.tgz#8f65fd399c87e7165f11fb70f7a2e7e0268e5f22"
+  integrity sha512-KG6C6EFzic7ViDmuI2Z0R7e6fnALtTWUkTH5QrL0Pl9EGRWwwwGmskXaItkerfl5CD5H9p9M/kbaMxX7TJRuOQ==
+
 unified@^9.0.0:
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/unified/-/unified-9.0.0.tgz#12b099f97ee8b36792dbad13d278ee2f696eed1d"

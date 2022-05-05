@@ -4,6 +4,7 @@
 
 import { nanoid } from 'nanoid';
 import Dom from './dom';
+import unidecode from 'unidecode-plus'
 
 /**
  * Possible log levels
@@ -701,23 +702,13 @@ export function cacheable<Target, Value, Arguments extends unknown[] = unknown[]
   return descriptor;
 };
 
-export const replaceMSCharacters = (input:string) : string => {
-  var mapping = {
-    "…": "...",
-    "—": "-",
-    "–": "-",
-    "‘": "'",
-    "’": "'",
-    "´": "'",
-    "“": '"',
-    "”": '"',
-    "&nbsp;": " ",
-  }
+export const replaceMSCharacters = (input: string): string => {
   if (!input) {
     return input
   }
-  const output = input.replace(/[…—–‘’´“”]|&nbsp;/g, m => mapping[m])
-  return output
+  return unidecode(input, {
+    skipRanges: [[192, 255]],
+  })
 }
 
 export const trimLineBreaks = (input:string): string => {
