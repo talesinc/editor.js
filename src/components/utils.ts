@@ -4,7 +4,6 @@
 
 import { nanoid } from 'nanoid';
 import Dom from './dom';
-import unidecode from 'unidecode-plus'
 
 /**
  * Possible log levels
@@ -708,6 +707,8 @@ export const replaceMSCharacters = (input: string): string => {
   }
 
   const mapping: { [string: string]: string } = {
+    '`': "'", // We *should* be able to support this, but currently breaks parser
+    '@': '(at)', // We *should* be able to support this, but currently breaks parser
     '…': '...',
     '—': '-',
     '–': '-',
@@ -717,7 +718,6 @@ export const replaceMSCharacters = (input: string): string => {
     '“': '"',
     '”': '"',
     '·': '.',
-    '`': "'",
     '½': '1/2',
     '⅓': '1/3',
     '¼': '1/4',
@@ -732,14 +732,18 @@ export const replaceMSCharacters = (input: string): string => {
   }
 
   const output = input.replace(
+    // C0-FF covers this range:
+    // ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþ
+    // However, C# regex \w is rejecting ÷ and ×
+
     // eslint-disable-next-line no-control-regex
-    /[…—–‘’´“”·½⅓¼⅕⅙⅛⅔⅖⅜¾]|&nbsp;|[^\x00-\x7F\xC0-\xFF]/g,
+    /[`…—–‘’´“”·½⅓¼⅕⅙⅛⅔⅖⅜¾×÷]|&nbsp;|[^\x00-\x7F\xC0-\xFF]/g,
     (m: string) => mapping[m] || ''
   )
 
-  return unidecode(output, {
-    skipRanges: [[192, 255]],
-  })
+  // We used to use unidecode-plus, but since we're stipping most of the characters now
+  // there doesn't seem to be a need to also apply it.
+  return output
 }
 
 export const trimLineBreaks = (input:string): string => {
