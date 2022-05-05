@@ -706,7 +706,38 @@ export const replaceMSCharacters = (input: string): string => {
   if (!input) {
     return input
   }
-  return unidecode(input, {
+
+  const mapping: { [string: string]: string } = {
+    '…': '...',
+    '—': '-',
+    '–': '-',
+    '‘': "'",
+    '’': "'",
+    '´': "'",
+    '“': '"',
+    '”': '"',
+    '·': '.',
+    '`': "'",
+    '½': '1/2',
+    '⅓': '1/3',
+    '¼': '1/4',
+    '⅕': '1/5',
+    '⅙': '1/6',
+    '⅛': '1/8',
+    '⅔': '2/3',
+    '⅖': '2/5',
+    '⅜': '3/8',
+    '¾': '3/4',
+    '&nbsp;': ' ',
+  }
+
+  const output = input.replace(
+    // eslint-disable-next-line no-control-regex
+    /[…—–‘’´“”·½⅓¼⅕⅙⅛⅔⅖⅜¾]|&nbsp;|[^\x00-\x7F\xC0-\xFF]/g,
+    (m: string) => mapping[m] || ''
+  )
+
+  return unidecode(output, {
     skipRanges: [[192, 255]],
   })
 }
