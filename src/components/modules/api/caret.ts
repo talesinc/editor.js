@@ -103,19 +103,21 @@ export default class CaretAPI extends Module {
    * @param {number} index - index of Block where to set caret
    * @param {string} position - position where to set caret
    * @param {number} offset - caret offset
+   * @param {boolean} forceScroll - If true, force scroll to element to the block. Used by SET_ACTIVE_LINE in TC.
    *
    * @returns {boolean}
    */
   private setToBlock = (
     index: number,
     position: string = this.Editor.Caret.positions.DEFAULT,
-    offset = 0
+    offset = 0,
+    forceScroll = false
   ): boolean => {
     if (!this.Editor.BlockManager.blocks[index]) {
       return false;
     }
 
-    this.Editor.Caret.setToBlock(this.Editor.BlockManager.blocks[index], position, offset);
+    this.Editor.Caret.setToBlock(this.Editor.BlockManager.blocks[index], position, offset, forceScroll);
 
     return true;
   }

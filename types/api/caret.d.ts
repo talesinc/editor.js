@@ -49,10 +49,10 @@ export interface Caret {
    * @param {number} index - index of Block where to set caret
    * @param {string} position - position where to set caret
    * @param {number} offset - caret offset
-   *
+   * @param {boolean} forceScroll - If true, force scroll to element to the block. Used by SET_ACTIVE_LINE in TC.
    * @return {boolean}
    */
-  setToBlock(index: number, position?: 'end'|'start'|'default', offset?: number): boolean;
+  setToBlock(index: number, position?: 'end'|'start'|'default', offset?: number, forceScroll?: boolean): boolean;
 
   /**
    * Sets caret to the Editor

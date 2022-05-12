@@ -224,8 +224,9 @@ export default class Caret extends Module {
    * @param {string} position - position where to set caret.
    *                            If default - leave default behaviour and apply offset if it's passed
    * @param {number} offset - caret offset regarding to the text node
+   * @param {boolean} forceScroll - If true, force scroll to element to the block. Used by SET_ACTIVE_LINE in TC.
    */
-  public setToBlock(block: Block, position: string = this.positions.DEFAULT, offset = 0): void {
+  public setToBlock(block: Block, position: string = this.positions.DEFAULT, offset = 0, forceScroll = false): void {
     const { BlockManager } = this.Editor;
     let element;
 
@@ -262,15 +263,18 @@ export default class Caret extends Module {
      */
     _.delay(() => {
       this.set(nodeToSet as HTMLElement, offset);
+
+      // Needed because in some situation (e.g., SET_ACTIVE_LINE from TC), window.scrollBy
+      // does not do anything.
+      if (forceScroll && !_.isElementInViewport(block.holder)) {
+        block.holder.scrollIntoView({
+          block: "start",
+          inline: "nearest",
+          behavior: "auto"
+        });
+      }  
     }, 20)();
 
-    if (!_.isElementInViewport(block.holder)) {
-      block.holder.scrollIntoView({
-        block: "end",
-        inline: "nearest",
-        behavior: "auto"
-      });
-    }
 
     BlockManager.setCurrentBlockByChildNode(block.holder);
     BlockManager.currentBlock.currentInput = element;
